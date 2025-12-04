@@ -2,7 +2,7 @@
   {
     "id": 1,
     "nama": "Nabil Assihidiqi (Owner)",
-    "nomor_user": "84948617036", 
+    "nomor_user": "84948617036",
     "password": "ownerkey",
     "nomor_bots": [
       "84948617036"
@@ -11,10 +11,19 @@
   {
     "id": 2,
     "nama": "Nabil Assihidiqi (Owner)",
-    "nomor_user": "6289677157146", 
+    "nomor_user": "6289677157146",
     "password": "ownerkeyy",
     "nomor_bots": [
       "6289677157146"
+    ]
+  },
+  {
+    "id": 3,
+    "nama": "ryu",
+    "nomor_user": "628811147684",
+    "password": "ryuu",
+    "nomor_bots": [
+      "628811147684"
     ]
   }
 ]
