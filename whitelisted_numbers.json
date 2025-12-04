@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": 1,
+    "nama": "Nabil",
+    "nomor_user": "306997729946",
+    "password": "ownerkey",
+    "nomor_bots": [
+      "306997729946"
+    ]
+  }
+]
