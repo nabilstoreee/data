@@ -66,5 +66,14 @@
     "nomor_bots": [
       "6285150890370"
     ]
+  },
+  {
+    "id": 9,
+    "nama": "Raa",
+    "nomor_user": "6281286096883",
+    "password": "raa",
+    "nomor_bots": [
+      "6281286096883"
+    ]
   }
 ]
