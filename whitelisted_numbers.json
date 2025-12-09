@@ -67,6 +67,15 @@
       "nomor_bots": [
         "6281286096883"
       ]
+    },
+    {
+      "id": 8,
+      "nama": "angga",
+      "nomor_user": "6283870222978",
+      "password": "fanii",
+      "nomor_bots": [
+        "6283870222978"
+      ]
     }
   ],
   "limits": {
