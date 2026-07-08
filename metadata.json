@@ -1,6 +1,0 @@
-{
-  "name": "SaveTik",
-  "description": "TikTok Video Downloader and player with integrated custom ads and point reward system",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
