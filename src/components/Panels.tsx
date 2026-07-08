@@ -5,7 +5,7 @@ import { X, Trash2, Download, LogIn, Save, Shield, Info, History, ChevronLeft, C
 import { VideoResultData } from '../types';
 import { getHistory, clearHistory, removeHistoryItem } from '../lib/history';
 import { SiteSettings } from '../lib/settings';
-import { loadUser, ActivityLog, getRegisteredUsers, saveRegisteredUsers, getBannedEmails, saveBannedEmails, getBannedIps, saveBannedIps, BlacklistItem, getSimulatedIp, BAN_DURATIONS, savePaymentRequests, removePaymentRequest, initializeFirestoreSync } from '../lib/user';
+import { loadUser, ActivityLog, getRegisteredUsers, saveRegisteredUsers, getBannedEmails, saveBannedEmails, getBannedIps, saveBannedIps, BlacklistItem, getSimulatedIp, BAN_DURATIONS, savePaymentRequests, removePaymentRequest, initializeFirestoreSync, deleteUserAccount, clearActivityLogs } from '../lib/user';
 import { BrandAd, MOCK_VIDEO_ADS, getAdsFromFirestore, saveAdToFirestore, deleteAdFromFirestore, resetAdsToDefaultFirestore } from '../lib/adsDb';
 
 // Common Modal Backdrop
@@ -561,7 +561,7 @@ export function AdminPanel({ isOpen, onClose, settings, onSave }: { isOpen: bool
   const [banDurationEmail, setBanDurationEmail] = useState<string | null>(null);
   const [banDurationValue, setBanDurationValue] = useState<number>(-1); // -1 for permanent
   
-  const handleDeleteUser = (email: string) => {
+  const handleDeleteUser = async (email: string) => {
     console.log('Deleting user:', email);
     // if (!window.confirm(`Yakin ingin menghapus akun ${email} secara permanen?`)) return;
     
@@ -569,7 +569,7 @@ export function AdminPanel({ isOpen, onClose, settings, onSave }: { isOpen: bool
     const currentUsers = getRegisteredUsers();
     const updatedUsers = currentUsers.filter((u: any) => u.email.toLowerCase() !== email.toLowerCase());
     setRegisteredUsers(updatedUsers);
-    saveRegisteredUsers(updatedUsers);
+    await deleteUserAccount(email);
     
     // Force active user to logout if it's them
     const activeUserRaw = localStorage.getItem('user_state');
@@ -2566,10 +2566,10 @@ export function AdminPanel({ isOpen, onClose, settings, onSave }: { isOpen: bool
                         <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             type="button"
-                            onClick={() => {
-                              localStorage.removeItem('savetik_activity_logs');
+                            onClick={async () => {
                               setLogs([]);
                               setShowClearConfirm(false);
+                              await clearActivityLogs();
                             }}
                             className="text-[10px] font-extrabold text-white bg-red-600 hover:bg-red-700 px-2.5 py-1.5 rounded-lg transition-all shadow-sm"
                           >
@@ -3718,21 +3718,7 @@ export function SidebarMenu({ isOpen, onClose, onOpenHistory, onOpenAdmin, onOpe
                         </div>
                         <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
                      </button>
-                     {settings?.updateNotificationActive !== false && (
-                       <button onClick={() => { onClose(); onOpenUpdate(); }} className="w-full flex items-center justify-between p-4 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group border-t border-slate-200 dark:border-white/5">
-                          <div className="flex items-center gap-4">
-                             <div className="p-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 relative">
-                                <Bell className="w-5 h-5" />
-                                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                             </div>
-                             <div>
-                                <span className="text-[15px] font-semibold text-slate-800 dark:text-slate-200 block">{t('Status Update')}</span>
-                                <span className="text-[11px] text-indigo-500 font-bold">{settings?.updateVersion || 'v2.5.0'} Aktif</span>
-                             </div>
-                          </div>
-                          <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
-                       </button>
-                     )}
+
                   </div>
                </div>
                {user?.email === "jrnabil570@gmail.com" && (
@@ -3755,15 +3741,7 @@ export function SidebarMenu({ isOpen, onClose, onOpenHistory, onOpenAdmin, onOpe
                <div className="mt-6">
                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">{t('Tentang')}</h3>
                  <div className="bg-slate-50 dark:bg-[#121212] border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden flex flex-col">
-                     <button onClick={() => { onClose(); onOpenAbout(); }} className="w-full flex items-center justify-between p-4 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group border-b border-slate-200 dark:border-white/5">
-                        <div className="flex items-center gap-4">
-                           <div className="p-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                              <Sparkles className="w-5 h-5" />
-                           </div>
-                           <span className="text-[15px] font-semibold text-slate-800 dark:text-slate-200">{t('Tentang Aplikasi')}</span>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
-                     </button>
+
                      <button onClick={() => { onClose(); onOpenInfo(); }} className="w-full flex items-center justify-between p-4 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group">
                         <div className="flex items-center gap-4">
                            <div className="p-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
